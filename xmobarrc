@@ -1,18 +1,34 @@
 Config {
-       font = "xft:Consolas:pixelsize=12",
---       lowerOnStart = False,
-       commands = [
-                -- Gardermoen
-                Run Weather "ENGM" ["-t"," <tempC>C ","-L","5","-H","20","--normal","green","--high","red","--low","lightblue"] 36000,
-                Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10,
-                Run Memory ["-t","Mem: <usedratio>%"] 10,
-                Run Swap [] 10,
-                Run Date "%a %b %_d %k:%M" "date" 10,
---                Run Network "ra0" [] 10,
---                Run BatteryP ["BAT1"] [] 10,
-                Run StdinReader
-                ]
+       font = "xft:MesloLGM:size=8.5:bold:antialias=true"
+       , bgColor = "#242424"
+       , fgColor = "gray"
+       , position = TopW L 90
+       , commands = [ Run Cpu ["-L","3","-H","50","-l","gray90","-n","gray90","-h","#F25555"] 10
+                    , Run Memory ["-t","Mem: <usedratio>%","-H","80","-L","10","-l","gray90","-n","gray90","-h","#F25555"] 10
+                    , Run Date "%a %b %_d %k:%M" "date" 10
+                    , Run DynNetwork ["-t","Net: +<rx>, -<tx>","-H","200","-L","10","-h","gray90","-l","gray90","-n","gray90"] 10
+                    , Run CoreTemp ["-t", "Temp: <core1> <core2>", "-L", "40", "-H", "75", "-l", "lightblue", "-n", "gray90", "-h", "#F25555"] 50
+                    --, Run Com "network-check.sh" [] "netcheck" 5
+                    -- battery monitor
+                    --, Run Battery        [ "--template" , "Batt: <acstatus>"
+                    --                     , "--Low"      , "10"        -- units: %
+                    --                     , "--High"     , "80"        -- units: %
+                    --                     , "--low"      , "#F25555"
+                    --                     , "--normal"   , "gray90"
+                    --                     , "--high"     , "#7CCC86"
+
+                    --                     , "--" -- battery specific options
+                    --                               -- discharging status
+                    --                               , "-o"   , "<left>% (<timeleft>)"
+                    --                               -- AC "on" status
+                    --                               , "-O"   , "<fc=#7CCC86>Charging</fc>"
+                    --                               -- charged status
+                    --                               , "-i"   , "<fc=#7CCC86>Charged</fc>"
+                    --                     ] 50
+                    , Run StdinReader
+                    ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %cpu% | %memory% * %swap%    <fc=#ee9a00>%date%</fc> | %ENGM%                                              "
+       --, template = "%StdinReader% }{ %cpu% | %coretemp% | %memory% | %battery% | %dynnetwork% (%netcheck%) | <fc=#69DFFA>%date%</fc>"
+       , template = "%StdinReader% }{ %cpu% | %coretemp% | %memory% | %dynnetwork% | <fc=#69DFFA>%date%</fc>"
        }
